@@ -1,41 +1,53 @@
+from tqdm import tqdm
 import geocoder
 import tbapy
 import csv
 import os
 
-year = 2019
-dist = 'chs'
+
+def get_region_teams(desired_region, year=2019, is_dist=False):
+    if is_dist:
+        return [item.team_number for item in tba.district_teams(str(year) + desired_region[0])]
+
+    teams = []
+    for page in range(32):
+        for tm in tba.teams(page, year):
+            if tm.state_prov in desired_region:
+                teams.append(tm.team_number)
+
+    return teams
 
 
 def locate_team(tm):
-    lat, lng = geocoder.osm(tm.city + ' ' + tm.state_prov).latlng
-    return {'team': tm.team_number, 'lat': lat, 'lng': lng}
+    tem = tba.team(tm)
+    lat, lng = geocoder.osm(tem.city + ' ' + tem.state_prov).latlng
+    return {'team': tm, 'lat': lat, 'lng': lng}
 
 
 if __name__ == '__main__':
-    dist_str = str(year) + dist
     tba = tbapy.TBA(os.getenv('TBA_KEY'))
-    dist_teams = tba.district_teams(dist_str)
-    dist_keys = [item.key for item in dist_teams]
 
-    dist_locs = {}
+    region = ['New York']
+    region_teams = get_region_teams(region)
+
+    team_locs = {}
     with open('team_locations.csv') as file:
         reader = csv.DictReader(file)
         for row in reader:
-            if 'frc' + row['team'] in dist_keys:
-                dist_locs['frc' + str(row['team'])] = row
+            if str(row['team']) in region_teams:
+                team_locs[str(row['team'])] = row
     file.close()
 
     # Handle when there are teams that weren't in the base csv.
-    for team in dist_teams:
-        if team.key not in dist_locs:
-            dist_locs[team.key] = locate_team(team)
+    for team in tqdm(region_teams):
+        if str(team) not in team_locs:
+            team_locs[str(team)] = locate_team(team)
 
-    with open(dist_str + '_locations.csv', 'w', newline='') as outfile:
+    with open(region[0] + '_locations.csv', 'w', newline='') as outfile:
         fieldnames = ['team', 'lat', 'lng']
         writer = csv.DictWriter(outfile, fieldnames)
         writer.writeheader()
 
-        for team in dist_locs:
-            writer.writerow(dist_locs[team])
+        for team in team_locs:
+            writer.writerow(team_locs[team])
     outfile.close()
