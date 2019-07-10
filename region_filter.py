@@ -13,13 +13,13 @@ def get_region_teams(desired_region, year=2019, is_dist=False):
     for page in range(32):
         for tm in tba.teams(page, year):
             if tm.state_prov in desired_region:
-                teams.append(tm.team_number)
+                teams.append(str(tm.team_number))
 
     return teams
 
 
 def locate_team(tm):
-    tem = tba.team(tm)
+    tem = tba.team(int(tm))
     lat, lng = geocoder.osm(tem.city + ' ' + tem.state_prov).latlng
     return {'team': tm, 'lat': lat, 'lng': lng}
 
@@ -40,8 +40,9 @@ if __name__ == '__main__':
 
     # Handle when there are teams that weren't in the base csv.
     for team in tqdm(region_teams):
-        if str(team) not in team_locs:
-            team_locs[str(team)] = locate_team(team)
+        if team not in team_locs:
+            print("Finding " + team)
+            team_locs[team] = locate_team(team)
 
     with open(region[0] + '_locations.csv', 'w', newline='') as outfile:
         fieldnames = ['team', 'lat', 'lng']
