@@ -1,4 +1,6 @@
+import matplotlib.pyplot as plt
 from retrying import retry
+import geopandas
 import requests
 
 
@@ -11,3 +13,11 @@ def get_route(coords):
 
 # TODO add city list
 # TODO rest of the owl
+
+
+states = geopandas.read_file('states.json')
+chs_states = ['Virginia', 'Maryland', 'District of Columbia']
+
+selected_states = states[states.NAME == 'New York']
+ax = selected_states.plot(figsize=(10, 10), alpha=0.5, edgecolor='k')
+plt.show()
