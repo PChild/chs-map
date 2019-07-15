@@ -16,8 +16,8 @@ def get_route(coords):
 # TODO add city list
 # TODO rest of the owl
 
-#region_name = 'CHS'
-region_name = 'New York'
+region_name = 'CHS'
+#region_name = 'New York'
 
 if region_name == 'CHS':
     regions = ['Virginia', 'Maryland', 'District of Columbia']
