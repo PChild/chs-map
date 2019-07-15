@@ -7,7 +7,7 @@ region = 'chs'
 
 
 def build_city_list():
-    towns = [61, 71, 162, 170, 172]
+    towns = [61, 162, 170, 172]
     min_size = 24000  # Sized to include all previous DCMP locations (Fairfax is smallest at 24.5k pop)
     if region is 'chs':
         states = ['va', 'md', 'dc']
@@ -23,7 +23,7 @@ def build_city_list():
         valid_locations = state_df.loc[state_df.SUMLEV.isin(towns)]
         valid_locations = valid_locations.loc[valid_locations.POPESTIMATE2018 > min_size]
         valid_locations = valid_locations[['STNAME', 'NAME', 'POPESTIMATE2018']]
-        valid_locations['NAME'] = valid_locations['NAME'].str[:-5]
+        valid_locations['NAME'] = valid_locations['NAME'].str.split(' ').str[:-1].str.join(' ')
 
         for idx, row in valid_locations.iterrows():
             valid_cities.append({'name': row.NAME, 'state': row.STNAME, 'pop': row.POPESTIMATE2018})
@@ -37,8 +37,11 @@ def save_city_list():
         writer = csv.DictWriter(outfile, ['name', 'state', 'pop'])
         writer.writeheader()
 
+        prev_cities = []
         for city in cities:
-            writer.writerow(city)
+            if city['name'] not in prev_cities:
+                writer.writerow(city)
+                prev_cities.append(city['name'])
     outfile.close()
 
 
@@ -67,3 +70,4 @@ def build_city_locations():
 
 if __name__ == '__main__':
     build_city_locations()
+
