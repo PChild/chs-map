@@ -60,7 +60,7 @@ def build_city_locations():
     for city in tqdm(read_city_list()):
         city_locations.append(locate_city(city))
 
-    with open(region + '_city_locations.csv', 'w') as outfile:
+    with open(region + '_city_locations.csv', 'w', newline='') as outfile:
         writer = csv.DictWriter(outfile, ['name', 'lat', 'lng'])
         writer.writeheader()
 
@@ -70,4 +70,3 @@ def build_city_locations():
 
 if __name__ == '__main__':
     build_city_locations()
-

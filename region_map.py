@@ -1,23 +1,10 @@
 from shapely.geometry import Point
 import matplotlib.pyplot as plt
-from retrying import retry
 import pandas as pd
 import geopandas
-import requests
-
-
-@retry(wait_fixed=5000)
-def get_route(coords):
-    ans = requests.get("http://router.project-osrm.org/route/v1/driving/" + coords + "?overview=full").json()
-    if ans is None or ans == {'message': 'Too Many Requests'}:
-        raise Exception("Too Many Requests")
-    return ans
-
-# TODO add city list
-# TODO rest of the owl
 
 region_name = 'CHS'
-#region_name = 'New York'
+# region_name = 'New York'
 
 if region_name == 'CHS':
     regions = ['Virginia', 'Maryland', 'District of Columbia']
