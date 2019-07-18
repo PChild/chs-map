@@ -24,11 +24,17 @@ destinations = list(range(len(source_data), len(source_data) + len(destination_d
 dm_1 = distance_matrix.distance_matrix(client=client,
                                        locations=locations,
                                        sources=sources,
-                                       destinations=destinations[:len(destinations)//2])
+                                       destinations=destinations[:len(destinations) // 2])
 
-# dm_2 = distance_matrix.distance_matrix(client=client,
-#                                       locations=locations,
-#                                       sources=sources,
-#                                       destinations=destinations[len(destinations)//2:])
+dm_1_df = pandas.DataFrame(dm_1['durations'])
+dm_1_df = dm_1_df[~dm_1_df[1].str.contains('None', na=False)]
+
+dm_2 = distance_matrix.distance_matrix(client=client,
+                                       locations=locations,
+                                       sources=sources,
+                                       destinations=destinations[len(destinations) // 2:])
+
+dm_2_df = pandas.DataFrame(dm_2['durations'])
+dm_2_df = dm_2_df[~dm_2_df[1].str.contains('None', na=False)]
 
 print(dm_1)
