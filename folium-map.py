@@ -23,23 +23,39 @@ def style_function(feature):
 
 
 m = folium.Map(location=[mid_lat, mid_lng],
-               zoom_start=7)
+               zoom_start=8,
+               tiles=None)
+
+folium.TileLayer(tiles='OpenStreetMap', control=False).add_to(m)
 
 folium.GeoJson(
     region + '.json',
-    name='geojson',
+    control=False,
     style_function=style_function
 ).add_to(m)
 
+team_set = folium.FeatureGroup(name='Teams')
 for team in tba.district_teams(year + region):
     team_loc = teams_df[teams_df['team'] == team.team_number].iloc[0]
-    line_1 = str(team.team_number) + ' - ' + team.nickname + '<br>'
-    line_2 = team.city + ', ' + team.state_prov + '<br>'
-    popup = folium.Html(line_1 + line_2, script=True)
+    line_1 = '<p>' + str(team.team_number) + ' ' + team.nickname + '</p>'
+    line_2 = '<p>' + team.city + ', ' + team.state_prov + '</p>'
+    html = line_1 + line_2
+    popup = folium.Popup(folium.IFrame(html=html, width=250, height=50), max_width=2000)
+
     folium.Marker(
         location=[team_loc['lat'], team_loc['lng']],
-        popup=popup,
-        icon=folium.Icon(color='red', icon='info-sign')
-    ).add_to(m)
+        popup=html,
+        icon=folium.Icon(icon='cog'),
+        tooltip=str(team.team_number)
+    ).add_to(team_set)
+team_set.add_to(m)
+
+mean_loc = folium.FeatureGroup(name='Mean Location')
+folium.Marker(location=[teams_df['lat'].mean(), teams_df['lng'].mean()],
+              icon=folium.Icon(color='orange', icon='star'),
+              tooltip='Mean location').add_to(mean_loc)
+mean_loc.add_to(m)
+
+folium.LayerControl().add_to(m)
 
 m.save('index.html')
