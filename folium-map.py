@@ -125,4 +125,18 @@ for yr in range(int(year) - 3, int(year) + 1):
 # Add layer controls
 folium.LayerControl().add_to(m)
 
+# legend_html = ‘’’
+#      <div style=”position: fixed;
+#      bottom: 50px; left: 50px; width: 100px; height: 90px;
+#      border:2px solid grey; z-index:9999; font-size:14px;
+#      “>&nbsp; Cool Legend <br>
+#      &nbsp; East &nbsp; <i class=”fa fa-map-marker fa-2x”
+#                   style=”color:green”></i><br>
+#      &nbsp; West &nbsp; <i class=”fa fa-map-marker fa-2x”
+#                   style=”color:red”></i>
+#       </div>
+#      ‘’’
+# some_map.get_root().html.add_child(folium.Element(legend_html))
+# some_map
+
 m.save('map.html')
