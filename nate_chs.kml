@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>Hampton Roads</name>
+    <Style id="icon-1899-0288D1-nodesc-normal">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>0</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <Style id="icon-1899-0288D1-nodesc-highlight">
+      <IconStyle>
+        <color>ffd18802</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+      <LabelStyle>
+        <scale>1</scale>
+      </LabelStyle>
+      <BalloonStyle>
+        <text><![CDATA[<h3>$[name]</h3>]]></text>
+      </BalloonStyle>
+    </Style>
+    <StyleMap id="icon-1899-0288D1-nodesc">
+      <Pair>
+        <key>normal</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-normal</styleUrl>
+      </Pair>
+      <Pair>
+        <key>highlight</key>
+        <styleUrl>#icon-1899-0288D1-nodesc-highlight</styleUrl>
+      </Pair>
+    </StyleMap>
+    <Placemark>
+      <name>122 - New Horizons Regional Education Centers</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.4113113,37.0633919,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>1610 - Franklin High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.9480325,36.6915536,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>1793 - Norview High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.2403305,36.9003379,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>1908 - Northampton High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -75.9409335,37.361213,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>2028 - Phoebus High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.3152426,37.0342934,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>2363 - Menchville High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.5305491,37.0958657,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>2890 - Hickory High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.216267,36.648692,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>3359 - Churchland High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.3709524,36.8804329,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>5957 - Heritage High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.4271477,37.0063855,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>6312 - Christchurch School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.5491427,37.6126199,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>7330 - Surry County High School</name>
+      <styleUrl>#icon-1899-0288D1-nodesc</styleUrl>
+      <Point>
+        <coordinates>
+          -76.9041087,37.0803228,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
