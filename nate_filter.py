@@ -12,8 +12,7 @@ teams_df = test[test['team'].str.isnumeric()]
 teams_df['team'] = teams_df['team'].astype(int)
 teams_df['lat'] = teams_df['geometry'].y
 teams_df['lng'] = teams_df['geometry'].x
-# fix this line, should compare to list of active teams, build column blah blah
-# teams_df['active'] =
+teams_df['active'] = teams_df['team'].isin(chs_teams)
 teams_out = teams_df[['team', 'lat', 'lng', 'active']]
-# teams_out.to_csv('nate_locs.csv', index=False)
-print(teams_out)
+teams_out.to_csv('nate_locs.csv', index=False)
+# print(teams_out)

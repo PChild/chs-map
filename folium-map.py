@@ -70,28 +70,51 @@ folium.GeoJson(
 body = '<html><body style="padding: 0; margin:0">{}</body></html>'.format
 paragraph = '<p style="margin: 1px; padding: 1px; font-size: small; font-family: sans-serif;">{}</p>'.format
 
-# Add team layer
-team_layer = folium.plugins.MarkerCluster(name='Teams').add_to(m)
-for team in tba.district_teams(year + region):
+# Add team layer and inactive team layers
+team_layer = folium.plugins.MarkerCluster(name='Current Teams').add_to(m)
+gone_layer = folium.plugins.MarkerCluster(name='Former Teams', show=False).add_to(m)
+
+# Read in Nate's more precise location data
+nate_data = pandas.read_csv('nate_locs.csv')
+current_teams = tba.district_teams(year + region)
+
+for idx, row in nate_data.iterrows():
+    team_data = [item for item in current_teams if item['team_number'] == row['team']]
+    is_active = len(team_data) > 0
+
+    if is_active:
+        team = team_data[0]
+        ico_color = 'blue'
+        ico = 'fa-users'
+    else:
+        team = tba.team(row['team'])
+        ico_color = 'red'
+        ico = 'times'
+
     line_1 = paragraph('Team ' + str(team.team_number))
     line_2 = paragraph(team.nickname)
     line_3 = paragraph(team.city + ', ' + team.state_prov)
     line_4 = process_social(team)
     html = body(line_1 + line_2 + line_3 + line_4)
 
-    team_inf = teams_df[teams_df['team'] == team.team_number].iloc[0]
+    team_inf = nate_data[nate_data['team'] == team.team_number].iloc[0]
     team_str = str(team.team_number)
 
-    folium.Marker(location=[team_inf['lat'], team_inf['lng']],
-                  tooltip=team.team_number,
-                  popup=folium.Popup(html, min_width=180, max_width=2000)
-                  ).add_to(team_layer)
+    team_marker = folium.Marker(location=[team_inf['lat'], team_inf['lng']],
+                                tooltip=team.team_number,
+                                icon=folium.Icon(icon=ico, color=ico_color, prefix='fa'),
+                                popup=folium.Popup(html, min_width=180, max_width=2000)
+                                )
+    if is_active:
+        team_marker.add_to(team_layer)
+    else:
+        team_marker.add_to(gone_layer)
 
 # Add mean location of teams
 mean_loc = folium.FeatureGroup(name='Mean Location', show=False)
 folium.Marker(location=[teams_df['lat'].mean(), teams_df['lng'].mean()],
               icon=folium.Icon(color='orange', icon='plus'),
-              tooltip='Mean location').add_to(mean_loc)
+              tooltip='Teams Mean Location').add_to(mean_loc)
 mean_loc.add_to(m)
 
 # Add district events
@@ -103,7 +126,7 @@ for yr in range(int(year) - 3, int(year) + 1):
 
         is_dist = event.event_type is event_types.DISTRICT
         ico = 'cog' if is_dist else 'star'
-        ico_color = 'red' if is_dist else 'orange'
+        ico_color = 'green' if is_dist else 'orange'
 
         line_1 = paragraph(event.name)
         line_2 = paragraph('Week ' + str(event.week))
@@ -125,18 +148,20 @@ for yr in range(int(year) - 3, int(year) + 1):
 # Add layer controls
 folium.LayerControl().add_to(m)
 
-# legend_html = ‘’’
-#      <div style=”position: fixed;
-#      bottom: 50px; left: 50px; width: 100px; height: 90px;
-#      border:2px solid grey; z-index:9999; font-size:14px;
-#      “>&nbsp; Cool Legend <br>
-#      &nbsp; East &nbsp; <i class=”fa fa-map-marker fa-2x”
-#                   style=”color:green”></i><br>
-#      &nbsp; West &nbsp; <i class=”fa fa-map-marker fa-2x”
-#                   style=”color:red”></i>
-#       </div>
-#      ‘’’
-# some_map.get_root().html.add_child(folium.Element(legend_html))
-# some_map
-
+legend_html = '''
+     <div style="position: fixed; bottom: 25px; right: 10px; width: 120px; height: 120px; border:2px solid grey; 
+     z-index:9999; font-size:12px; background:#eee">
+     <div style="margin: 5px 0 0 5px">Active Team <i class="fa fa-users" style="color:white; background-color:#37A7DA; font-size: 1.2em;
+      margin:2px; padding: 0; position:absolute; right:2px"></i></div>
+     <div style="margin: 5px 0 0 5px"> Former Team <i class="fa fa-times" style="color:white; background-color:#D33D29; font-size: 1.5em;
+      margin:2px; padding: 0; position:absolute; right:2px"></i><br></div>
+     <div style="margin: 5px 0 0 5px"> Mean Location <i class="fa fa-plus" style="color:white; background-color:#F69730; font-size: 1.5em;
+      margin:2px; padding: 0; position:absolute; right:2px"></i><br></div>
+     <div style="margin: 5px 0 0 5px"> District Event <i class="fa fa-cog" style="color:white; background-color:#71AE26; font-size: 1.5em;
+      margin:2px; padding: 0; position:absolute; right:2px"></i><br></div>
+     <div style="margin: 5px 0 0 5px"> District Champs <i class="fa fa-star" style="color:white; background-color:#F69730; font-size: 1.3em;
+      margin:2px; padding: 0; position:absolute; right:2px"></i></div>
+      </div>
+     '''
+m.get_root().html.add_child(folium.Element(legend_html))
 m.save('map.html')
